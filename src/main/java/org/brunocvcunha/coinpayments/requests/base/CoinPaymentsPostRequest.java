@@ -15,32 +15,28 @@
  */
 package org.brunocvcunha.coinpayments.requests.base;
 
-import java.io.IOException;
-
-import javax.crypto.Mac;
-
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import org.apache.commons.codec.digest.HmacAlgorithms;
 import org.apache.commons.codec.digest.HmacUtils;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.util.EntityUtils;
+import org.apache.log4j.Logger;
 import org.brunocvcunha.coinpayments.CoinPaymentsConstants;
 
-import lombok.extern.log4j.Log4j;
+import java.io.IOException;
 
 /**
  * 
  * @author brunovolpato
  *
  */
-@Data
-@EqualsAndHashCode(callSuper = true)
-@Log4j
 public abstract class CoinPaymentsPostRequest<T> extends CoinPaymentsRequest<T> {
+
+    private static final Logger log = Logger.getLogger(CoinPaymentsPostRequest.class);
+
+    public CoinPaymentsPostRequest() {
+    }
 
     @Override
     public String getMethod() {
@@ -82,5 +78,27 @@ public abstract class CoinPaymentsPostRequest<T> extends CoinPaymentsRequest<T> 
 
     public boolean isSigned() {
         return true;
+    }
+
+    public String toString() {
+        return "CoinPaymentsPostRequest()";
+    }
+
+    public boolean equals(final Object o) {
+        if (o == this) return true;
+        if (!(o instanceof CoinPaymentsPostRequest)) return false;
+        final CoinPaymentsPostRequest<?> other = (CoinPaymentsPostRequest<?>) o;
+        if (!other.canEqual((Object) this)) return false;
+        if (!super.equals(o)) return false;
+        return true;
+    }
+
+    protected boolean canEqual(final Object other) {
+        return other instanceof CoinPaymentsPostRequest;
+    }
+
+    public int hashCode() {
+        int result = super.hashCode();
+        return result;
     }
 }

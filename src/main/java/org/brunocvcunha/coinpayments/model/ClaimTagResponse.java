@@ -17,10 +17,30 @@ package org.brunocvcunha.coinpayments.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
-import lombok.Data;
-
-@Data
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class ClaimTagResponse {
 
+    public ClaimTagResponse() {
+    }
+
+    public boolean equals(final Object o) {
+        if (o == this) return true;
+        if (!(o instanceof ClaimTagResponse)) return false;
+        final ClaimTagResponse other = (ClaimTagResponse) o;
+        if (!other.canEqual((Object) this)) return false;
+        return true;
+    }
+
+    protected boolean canEqual(final Object other) {
+        return other instanceof ClaimTagResponse;
+    }
+
+    public int hashCode() {
+        int result = 1;
+        return result;
+    }
+
+    public String toString() {
+        return "ClaimTagResponse()";
+    }
 }

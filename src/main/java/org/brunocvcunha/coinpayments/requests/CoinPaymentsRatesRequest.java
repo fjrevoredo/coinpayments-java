@@ -15,14 +15,13 @@
  */
 package org.brunocvcunha.coinpayments.requests;
 
-import java.util.Map;
-
-import lombok.*;
+import com.fasterxml.jackson.core.type.TypeReference;
 import org.brunocvcunha.coinpayments.model.RateResponse;
 import org.brunocvcunha.coinpayments.model.ResponseWrapper;
 import org.brunocvcunha.coinpayments.requests.base.CoinPaymentsPostRequest;
 
-import com.fasterxml.jackson.core.type.TypeReference;
+import java.io.IOException;
+import java.util.Map;
 
 /**
  * Search GIFs Request
@@ -30,15 +29,21 @@ import com.fasterxml.jackson.core.type.TypeReference;
  * @author Bruno Candido Volpato da Cunha
  *
  */
-@RequiredArgsConstructor
-@AllArgsConstructor
-@Data
-@Builder
 public class CoinPaymentsRatesRequest extends CoinPaymentsPostRequest<ResponseWrapper<Map<String, RateResponse>>> {
 
-    private boolean onlyAccepted = true;
-    
+
     private boolean onlyShort = false;
+
+    public CoinPaymentsRatesRequest() {
+    }
+
+    public CoinPaymentsRatesRequest(boolean onlyShort) {
+        this.onlyShort = onlyShort;
+    }
+
+    public static CoinPaymentsRatesRequestBuilder builder() {
+        return new CoinPaymentsRatesRequestBuilder();
+    }
 
     @Override
     public String getUrl() {
@@ -46,17 +51,71 @@ public class CoinPaymentsRatesRequest extends CoinPaymentsPostRequest<ResponseWr
     }
     
     @Override
-    @SneakyThrows
+    
     public String getPayload() {
-        return "cmd=rates&accepted=" + (onlyAccepted ? "1" : "0") + "&short=" + (onlyShort ? "1" : "0");
+        return "cmd=rates&accepted=1" + "&short=" + (onlyShort ? "1" : "0");
     }
 
 
     @Override
-    @SneakyThrows
-    public ResponseWrapper<Map<String, RateResponse>> parseResult(int statusCode, String content) {
+    
+    public ResponseWrapper<Map<String, RateResponse>> parseResult(int statusCode, String content) throws IOException {
         ResponseWrapper<Map<String, RateResponse>> wrapper = parseJson(content, new TypeReference<ResponseWrapper<Map<String, RateResponse>>>() {});
         return wrapper;
     }
 
+
+    public boolean isOnlyShort() {
+        return this.onlyShort;
+    }
+
+
+    public void setOnlyShort(boolean onlyShort) {
+        this.onlyShort = onlyShort;
+    }
+
+    public boolean equals(final Object o) {
+        if (o == this) return true;
+        if (!(o instanceof CoinPaymentsRatesRequest)) return false;
+        final CoinPaymentsRatesRequest other = (CoinPaymentsRatesRequest) o;
+        if (!other.canEqual((Object) this)) return false;
+        if (this.isOnlyShort() != other.isOnlyShort()) return false;
+        return true;
+    }
+
+    protected boolean canEqual(final Object other) {
+        return other instanceof CoinPaymentsRatesRequest;
+    }
+
+    public int hashCode() {
+        final int PRIME = 59;
+        int result = 1;
+        result = result * PRIME + (this.isOnlyShort() ? 79 : 97);
+        return result;
+    }
+
+    public String toString() {
+        return "CoinPaymentsRatesRequest(onlyShort=" + this.isOnlyShort() + ")";
+    }
+
+    public static class CoinPaymentsRatesRequestBuilder {
+        private boolean onlyShort;
+
+        CoinPaymentsRatesRequestBuilder() {
+        }
+
+
+        public CoinPaymentsRatesRequestBuilder onlyShort(boolean onlyShort) {
+            this.onlyShort = onlyShort;
+            return this;
+        }
+
+        public CoinPaymentsRatesRequest build() {
+            return new CoinPaymentsRatesRequest(onlyShort);
+        }
+
+        public String toString() {
+            return "CoinPaymentsRatesRequest.CoinPaymentsRatesRequestBuilder(onlyShort=" + this.onlyShort + ")";
+        }
+    }
 }

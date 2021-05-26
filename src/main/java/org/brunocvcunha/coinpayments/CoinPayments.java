@@ -15,19 +15,14 @@
  */
 package org.brunocvcunha.coinpayments;
 
-import java.io.IOException;
-
 import org.apache.http.HttpResponse;
 import org.apache.http.client.ClientProtocolException;
 import org.apache.http.impl.client.CloseableHttpClient;
-import org.apache.http.impl.client.HttpClients;
 import org.apache.log4j.Level;
+import org.apache.log4j.Logger;
 import org.brunocvcunha.coinpayments.requests.base.CoinPaymentsRequest;
 
-import lombok.Builder;
-import lombok.Getter;
-import lombok.Setter;
-import lombok.extern.log4j.Log4j;
+import java.io.IOException;
 
 /**
  * 
@@ -36,29 +31,32 @@ import lombok.extern.log4j.Log4j;
  * @author Bruno Candido Volpato da Cunha
  *
  */
-@Builder
-@Log4j
 public class CoinPayments {
+
+    private static final Logger log = Logger.getLogger(CoinPayments.class);
 
     static {
         log.setLevel( Level.WARN );
     }
 
-    @Getter
-    @Setter
     private String publicKey;
     
-    @Getter
-    @Setter
     private String privateKey;
 
-    @Getter
-    @Setter
     protected HttpResponse lastResponse;
 
-    @Getter
-    @Setter
     protected CloseableHttpClient client;
+
+    CoinPayments(String publicKey, String privateKey, HttpResponse lastResponse, CloseableHttpClient client) {
+        this.publicKey = publicKey;
+        this.privateKey = privateKey;
+        this.lastResponse = lastResponse;
+        this.client = client;
+    }
+
+    public static CoinPaymentsBuilder builder() {
+        return new CoinPaymentsBuilder();
+    }
 
     /**
      * Send request to endpoint
@@ -82,4 +80,73 @@ public class CoinPayments {
     }
 
 
+    public String getPublicKey() {
+        return this.publicKey;
+    }
+
+    public String getPrivateKey() {
+        return this.privateKey;
+    }
+
+    public HttpResponse getLastResponse() {
+        return this.lastResponse;
+    }
+
+    public CloseableHttpClient getClient() {
+        return this.client;
+    }
+
+    public void setPublicKey(String publicKey) {
+        this.publicKey = publicKey;
+    }
+
+    public void setPrivateKey(String privateKey) {
+        this.privateKey = privateKey;
+    }
+
+    public void setLastResponse(HttpResponse lastResponse) {
+        this.lastResponse = lastResponse;
+    }
+
+    public void setClient(CloseableHttpClient client) {
+        this.client = client;
+    }
+
+    public static class CoinPaymentsBuilder {
+        private String publicKey;
+        private String privateKey;
+        private HttpResponse lastResponse;
+        private CloseableHttpClient client;
+
+        CoinPaymentsBuilder() {
+        }
+
+        public CoinPaymentsBuilder publicKey(String publicKey) {
+            this.publicKey = publicKey;
+            return this;
+        }
+
+        public CoinPaymentsBuilder privateKey(String privateKey) {
+            this.privateKey = privateKey;
+            return this;
+        }
+
+        public CoinPaymentsBuilder lastResponse(HttpResponse lastResponse) {
+            this.lastResponse = lastResponse;
+            return this;
+        }
+
+        public CoinPaymentsBuilder client(CloseableHttpClient client) {
+            this.client = client;
+            return this;
+        }
+
+        public CoinPayments build() {
+            return new CoinPayments(publicKey, privateKey, lastResponse, client);
+        }
+
+        public String toString() {
+            return "CoinPayments.CoinPaymentsBuilder(publicKey=" + this.publicKey + ", privateKey=" + this.privateKey + ", lastResponse=" + this.lastResponse + ", client=" + this.client + ")";
+        }
+    }
 }

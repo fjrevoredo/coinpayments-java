@@ -15,20 +15,22 @@
  */
 package org.brunocvcunha.coinpayments.requests;
 
-import java.util.List;
-
+import com.fasterxml.jackson.core.type.TypeReference;
 import org.brunocvcunha.coinpayments.model.GetTagListResponse;
 import org.brunocvcunha.coinpayments.model.ResponseWrapper;
 import org.brunocvcunha.coinpayments.requests.base.CoinPaymentsPostRequest;
 
-import com.fasterxml.jackson.core.type.TypeReference;
+import java.io.IOException;
+import java.util.List;
 
-import lombok.Builder;
-import lombok.NoArgsConstructor;
-
-@NoArgsConstructor
-@Builder
 public class CoinPaymentsGetTagListRequest extends CoinPaymentsPostRequest<ResponseWrapper<List<GetTagListResponse>>> {
+
+	public CoinPaymentsGetTagListRequest() {
+	}
+
+	public static CoinPaymentsGetTagListRequestBuilder builder() {
+		return new CoinPaymentsGetTagListRequestBuilder();
+	}
 
 	@Override
 	public String getUrl() {
@@ -41,9 +43,21 @@ public class CoinPaymentsGetTagListRequest extends CoinPaymentsPostRequest<Respo
     }
 
 	@Override
-	public ResponseWrapper<List<GetTagListResponse>> parseResult(int resultCode, String content) {
+	public ResponseWrapper<List<GetTagListResponse>> parseResult (int resultCode, String content ) throws IOException {
         ResponseWrapper<List<GetTagListResponse>> wrapper = parseJson(content, new TypeReference<ResponseWrapper<List<GetTagListResponse>>>() {});
         return wrapper;		
 	}
 
+	public static class CoinPaymentsGetTagListRequestBuilder {
+		CoinPaymentsGetTagListRequestBuilder() {
+		}
+
+		public CoinPaymentsGetTagListRequest build() {
+			return new CoinPaymentsGetTagListRequest();
+		}
+
+		public String toString() {
+			return "CoinPaymentsGetTagListRequest.CoinPaymentsGetTagListRequestBuilder()";
+		}
+	}
 }

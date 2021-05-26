@@ -15,22 +15,14 @@
  */
 package org.brunocvcunha.coinpayments.requests;
 
+import com.fasterxml.jackson.core.type.TypeReference;
+import lombok.NonNull;
 import org.brunocvcunha.coinpayments.model.CreateTransferResponse;
 import org.brunocvcunha.coinpayments.model.ResponseWrapper;
 import org.brunocvcunha.coinpayments.requests.base.CoinPaymentsPostRequest;
 
-import com.fasterxml.jackson.core.type.TypeReference;
+import java.io.IOException;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NonNull;
-import lombok.RequiredArgsConstructor;
-
-@RequiredArgsConstructor
-@AllArgsConstructor
-@Data
-@Builder
 public class CoinPaymentsCreateTransferRequest extends CoinPaymentsPostRequest<ResponseWrapper<CreateTransferResponse>>  {
 	
     @NonNull
@@ -39,16 +31,43 @@ public class CoinPaymentsCreateTransferRequest extends CoinPaymentsPostRequest<R
     @NonNull
     private String currency;
 
-    @Builder.Default
     private String merchant = "";
     
-    @Builder.Default
     private String pbntag = "";
 
-    @Builder.Default private boolean autoConfirm = true;
+    private boolean autoConfirm = true;
+
+    public CoinPaymentsCreateTransferRequest(@NonNull double amount, @NonNull String currency) {
+        this.amount = amount;
+        this.currency = currency;
+    }
+
+    public CoinPaymentsCreateTransferRequest(@NonNull double amount, @NonNull String currency, String merchant, String pbntag, boolean autoConfirm) {
+        this.amount = amount;
+        this.currency = currency;
+        this.merchant = merchant;
+        this.pbntag = pbntag;
+        this.autoConfirm = autoConfirm;
+    }
+
+    private static String $default$merchant() {
+        return "";
+    }
+
+    private static String $default$pbntag() {
+        return "";
+    }
+
+    private static boolean $default$autoConfirm() {
+        return true;
+    }
+
+    public static CoinPaymentsCreateTransferRequestBuilder builder() {
+        return new CoinPaymentsCreateTransferRequestBuilder();
+    }
 
 
-	@Override
+    @Override
 	public String getUrl() {
 		return "";
 	}
@@ -60,9 +79,154 @@ public class CoinPaymentsCreateTransferRequest extends CoinPaymentsPostRequest<R
     }
 
 	@Override
-	public ResponseWrapper<CreateTransferResponse> parseResult(int resultCode, String content) {
+	public ResponseWrapper<CreateTransferResponse> parseResult(int resultCode, String content) throws IOException {
         ResponseWrapper<CreateTransferResponse> wrapper = parseJson( content, new TypeReference<ResponseWrapper<CreateTransferResponse>>() {} );
         return wrapper;
 	}
 
+    @NonNull
+    public double getAmount() {
+        return this.amount;
+    }
+
+    @NonNull
+    public String getCurrency() {
+        return this.currency;
+    }
+
+    public String getMerchant() {
+        return this.merchant;
+    }
+
+    public String getPbntag() {
+        return this.pbntag;
+    }
+
+    public boolean isAutoConfirm() {
+        return this.autoConfirm;
+    }
+
+    public void setAmount(@NonNull double amount) {
+        this.amount = amount;
+    }
+
+    public void setCurrency(@NonNull String currency) {
+        this.currency = currency;
+    }
+
+    public void setMerchant(String merchant) {
+        this.merchant = merchant;
+    }
+
+    public void setPbntag(String pbntag) {
+        this.pbntag = pbntag;
+    }
+
+    public void setAutoConfirm(boolean autoConfirm) {
+        this.autoConfirm = autoConfirm;
+    }
+
+    public boolean equals(final Object o) {
+        if (o == this) return true;
+        if (!(o instanceof CoinPaymentsCreateTransferRequest)) return false;
+        final CoinPaymentsCreateTransferRequest other = (CoinPaymentsCreateTransferRequest) o;
+        if (!other.canEqual((Object) this)) return false;
+        if (Double.compare(this.getAmount(), other.getAmount()) != 0) return false;
+        final Object this$currency = this.getCurrency();
+        final Object other$currency = other.getCurrency();
+        if (this$currency == null ? other$currency != null : !this$currency.equals(other$currency)) return false;
+        final Object this$merchant = this.getMerchant();
+        final Object other$merchant = other.getMerchant();
+        if (this$merchant == null ? other$merchant != null : !this$merchant.equals(other$merchant)) return false;
+        final Object this$pbntag = this.getPbntag();
+        final Object other$pbntag = other.getPbntag();
+        if (this$pbntag == null ? other$pbntag != null : !this$pbntag.equals(other$pbntag)) return false;
+        if (this.isAutoConfirm() != other.isAutoConfirm()) return false;
+        return true;
+    }
+
+    protected boolean canEqual(final Object other) {
+        return other instanceof CoinPaymentsCreateTransferRequest;
+    }
+
+    public int hashCode() {
+        final int PRIME = 59;
+        int result = 1;
+        final long $amount = Double.doubleToLongBits(this.getAmount());
+        result = result * PRIME + (int) ($amount >>> 32 ^ $amount);
+        final Object $currency = this.getCurrency();
+        result = result * PRIME + ($currency == null ? 43 : $currency.hashCode());
+        final Object $merchant = this.getMerchant();
+        result = result * PRIME + ($merchant == null ? 43 : $merchant.hashCode());
+        final Object $pbntag = this.getPbntag();
+        result = result * PRIME + ($pbntag == null ? 43 : $pbntag.hashCode());
+        result = result * PRIME + (this.isAutoConfirm() ? 79 : 97);
+        return result;
+    }
+
+    public String toString() {
+        return "CoinPaymentsCreateTransferRequest(amount=" + this.getAmount() + ", currency=" + this.getCurrency() + ", merchant=" + this.getMerchant() + ", pbntag=" + this.getPbntag() + ", autoConfirm=" + this.isAutoConfirm() + ")";
+    }
+
+    public static class CoinPaymentsCreateTransferRequestBuilder {
+        private double amount;
+        private String currency;
+        private String merchant$value;
+        private boolean merchant$set;
+        private String pbntag$value;
+        private boolean pbntag$set;
+        private boolean autoConfirm$value;
+        private boolean autoConfirm$set;
+
+        CoinPaymentsCreateTransferRequestBuilder() {
+        }
+
+        public CoinPaymentsCreateTransferRequestBuilder amount(double amount) {
+            this.amount = amount;
+            return this;
+        }
+
+        public CoinPaymentsCreateTransferRequestBuilder currency(String currency) {
+            this.currency = currency;
+            return this;
+        }
+
+        public CoinPaymentsCreateTransferRequestBuilder merchant(String merchant) {
+            this.merchant$value = merchant;
+            this.merchant$set = true;
+            return this;
+        }
+
+        public CoinPaymentsCreateTransferRequestBuilder pbntag(String pbntag) {
+            this.pbntag$value = pbntag;
+            this.pbntag$set = true;
+            return this;
+        }
+
+        public CoinPaymentsCreateTransferRequestBuilder autoConfirm(boolean autoConfirm) {
+            this.autoConfirm$value = autoConfirm;
+            this.autoConfirm$set = true;
+            return this;
+        }
+
+        public CoinPaymentsCreateTransferRequest build() {
+            String merchant$value = this.merchant$value;
+            if (!this.merchant$set) {
+                merchant$value = CoinPaymentsCreateTransferRequest.$default$merchant();
+            }
+            String pbntag$value = this.pbntag$value;
+            if (!this.pbntag$set) {
+                pbntag$value = CoinPaymentsCreateTransferRequest.$default$pbntag();
+            }
+            boolean autoConfirm$value = this.autoConfirm$value;
+            if (!this.autoConfirm$set) {
+                autoConfirm$value = CoinPaymentsCreateTransferRequest.$default$autoConfirm();
+            }
+            return new CoinPaymentsCreateTransferRequest(amount, currency, merchant$value, pbntag$value, autoConfirm$value);
+        }
+
+        public String toString() {
+            return "CoinPaymentsCreateTransferRequest.CoinPaymentsCreateTransferRequestBuilder(amount=" + this.amount + ", currency=" + this.currency + ", merchant$value=" + this.merchant$value + ", pbntag$value=" + this.pbntag$value + ", autoConfirm$value=" + this.autoConfirm$value + ")";
+        }
+    }
 }

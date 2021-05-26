@@ -16,23 +16,27 @@
 package org.brunocvcunha.coinpayments.requests;
 
 import com.fasterxml.jackson.core.type.TypeReference;
-import lombok.*;
-
-import java.util.List;
-import java.util.Map;
-
+import lombok.NonNull;
 import org.brunocvcunha.coinpayments.model.CreateWithdrawalResponse;
 import org.brunocvcunha.coinpayments.model.ResponseWrapper;
 import org.brunocvcunha.coinpayments.requests.base.CoinPaymentsPostRequest;
 
-@RequiredArgsConstructor
-@Data
-@Builder
-@EqualsAndHashCode(callSuper = true)
+import java.io.IOException;
+import java.util.List;
+import java.util.Map;
+
 public class CoinPaymentsCreateMassWithdrawalRequest extends CoinPaymentsPostRequest<ResponseWrapper<Map<String, CreateWithdrawalResponse>>> {
 
     @NonNull
     private List<Map<String, String>> wd;
+
+    public CoinPaymentsCreateMassWithdrawalRequest(@NonNull List<Map<String, String>> wd) {
+        this.wd = wd;
+    }
+
+    public static CoinPaymentsCreateMassWithdrawalRequestBuilder builder() {
+        return new CoinPaymentsCreateMassWithdrawalRequestBuilder();
+    }
 
     @Override
     public String getUrl () {
@@ -52,8 +56,66 @@ public class CoinPaymentsCreateMassWithdrawalRequest extends CoinPaymentsPostReq
     }
 
     @Override
-    public ResponseWrapper<Map<String, CreateWithdrawalResponse>> parseResult ( int resultCode, String content ) {
+    public ResponseWrapper<Map<String, CreateWithdrawalResponse>> parseResult ( int resultCode, String content ) throws IOException {
     	ResponseWrapper<Map<String, CreateWithdrawalResponse>> wrapper = parseJson( content, new TypeReference<ResponseWrapper<Map<String, CreateWithdrawalResponse>>>() {});
         return wrapper;
+    }
+
+    @NonNull
+    public List<Map<String, String>> getWd() {
+        return this.wd;
+    }
+
+    public void setWd(@NonNull List<Map<String, String>> wd) {
+        this.wd = wd;
+    }
+
+    public String toString() {
+        return "CoinPaymentsCreateMassWithdrawalRequest(wd=" + this.getWd() + ")";
+    }
+
+    public boolean equals(final Object o) {
+        if (o == this) return true;
+        if (!(o instanceof CoinPaymentsCreateMassWithdrawalRequest))
+            return false;
+        final CoinPaymentsCreateMassWithdrawalRequest other = (CoinPaymentsCreateMassWithdrawalRequest) o;
+        if (!other.canEqual((Object) this)) return false;
+        if (!super.equals(o)) return false;
+        final Object this$wd = this.getWd();
+        final Object other$wd = other.getWd();
+        if (this$wd == null ? other$wd != null : !this$wd.equals(other$wd)) return false;
+        return true;
+    }
+
+    protected boolean canEqual(final Object other) {
+        return other instanceof CoinPaymentsCreateMassWithdrawalRequest;
+    }
+
+    public int hashCode() {
+        final int PRIME = 59;
+        int result = super.hashCode();
+        final Object $wd = this.getWd();
+        result = result * PRIME + ($wd == null ? 43 : $wd.hashCode());
+        return result;
+    }
+
+    public static class CoinPaymentsCreateMassWithdrawalRequestBuilder {
+        private List<Map<String, String>> wd;
+
+        CoinPaymentsCreateMassWithdrawalRequestBuilder() {
+        }
+
+        public CoinPaymentsCreateMassWithdrawalRequestBuilder wd(List<Map<String, String>> wd) {
+            this.wd = wd;
+            return this;
+        }
+
+        public CoinPaymentsCreateMassWithdrawalRequest build() {
+            return new CoinPaymentsCreateMassWithdrawalRequest(wd);
+        }
+
+        public String toString() {
+            return "CoinPaymentsCreateMassWithdrawalRequest.CoinPaymentsCreateMassWithdrawalRequestBuilder(wd=" + this.wd + ")";
+        }
     }
 }

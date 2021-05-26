@@ -15,26 +15,27 @@
  */
 package org.brunocvcunha.coinpayments.requests;
 
+import com.fasterxml.jackson.core.type.TypeReference;
 import org.brunocvcunha.coinpayments.model.ResponseWrapper;
 import org.brunocvcunha.coinpayments.model.WithdrawalInfoResponse;
-import org.brunocvcunha.coinpayments.requests.CoinPaymentsGetTransactionInfoRequest.CoinPaymentsGetTransactionInfoRequestBuilder;
 import org.brunocvcunha.coinpayments.requests.base.CoinPaymentsPostRequest;
 
-import com.fasterxml.jackson.core.type.TypeReference;
+import java.io.IOException;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NonNull;
-import lombok.RequiredArgsConstructor;
-
-@RequiredArgsConstructor
-@AllArgsConstructor
-@Data
-@Builder
 public class CoinPaymentsGetWithdrawalInfoRequest  extends CoinPaymentsPostRequest<ResponseWrapper <WithdrawalInfoResponse>>   {
 
 	private String id;
+
+	public CoinPaymentsGetWithdrawalInfoRequest() {
+	}
+
+	public CoinPaymentsGetWithdrawalInfoRequest(String id) {
+		this.id = id;
+	}
+
+	public static CoinPaymentsGetWithdrawalInfoRequestBuilder builder() {
+		return new CoinPaymentsGetWithdrawalInfoRequestBuilder();
+	}
 
 	@Override
 	public String getUrl() {
@@ -47,9 +48,63 @@ public class CoinPaymentsGetWithdrawalInfoRequest  extends CoinPaymentsPostReque
     }
 
 	@Override
-	public ResponseWrapper<WithdrawalInfoResponse> parseResult(int resultCode, String content) {
+	public ResponseWrapper<WithdrawalInfoResponse> parseResult (int resultCode, String content ) throws IOException {
         ResponseWrapper<WithdrawalInfoResponse> wrapper = parseJson(content, new TypeReference<ResponseWrapper<WithdrawalInfoResponse>>() {});
         return wrapper;
 	}
 
+	public String getId() {
+		return this.id;
+	}
+
+	public void setId(String id) {
+		this.id = id;
+	}
+
+	public boolean equals(final Object o) {
+		if (o == this) return true;
+		if (!(o instanceof CoinPaymentsGetWithdrawalInfoRequest)) return false;
+		final CoinPaymentsGetWithdrawalInfoRequest other = (CoinPaymentsGetWithdrawalInfoRequest) o;
+		if (!other.canEqual((Object) this)) return false;
+		final Object this$id = this.getId();
+		final Object other$id = other.getId();
+		if (this$id == null ? other$id != null : !this$id.equals(other$id)) return false;
+		return true;
+	}
+
+	protected boolean canEqual(final Object other) {
+		return other instanceof CoinPaymentsGetWithdrawalInfoRequest;
+	}
+
+	public int hashCode() {
+		final int PRIME = 59;
+		int result = 1;
+		final Object $id = this.getId();
+		result = result * PRIME + ($id == null ? 43 : $id.hashCode());
+		return result;
+	}
+
+	public String toString() {
+		return "CoinPaymentsGetWithdrawalInfoRequest(id=" + this.getId() + ")";
+	}
+
+	public static class CoinPaymentsGetWithdrawalInfoRequestBuilder {
+		private String id;
+
+		CoinPaymentsGetWithdrawalInfoRequestBuilder() {
+		}
+
+		public CoinPaymentsGetWithdrawalInfoRequestBuilder id(String id) {
+			this.id = id;
+			return this;
+		}
+
+		public CoinPaymentsGetWithdrawalInfoRequest build() {
+			return new CoinPaymentsGetWithdrawalInfoRequest(id);
+		}
+
+		public String toString() {
+			return "CoinPaymentsGetWithdrawalInfoRequest.CoinPaymentsGetWithdrawalInfoRequestBuilder(id=" + this.id + ")";
+		}
+	}
 }

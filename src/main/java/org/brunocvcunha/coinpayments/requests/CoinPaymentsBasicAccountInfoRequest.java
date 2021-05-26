@@ -15,16 +15,12 @@
  */
 package org.brunocvcunha.coinpayments.requests;
 
-import lombok.Builder;
-import lombok.NoArgsConstructor;
-
+import com.fasterxml.jackson.core.type.TypeReference;
 import org.brunocvcunha.coinpayments.model.BasicInfoResponse;
 import org.brunocvcunha.coinpayments.model.ResponseWrapper;
 import org.brunocvcunha.coinpayments.requests.base.CoinPaymentsPostRequest;
 
-import com.fasterxml.jackson.core.type.TypeReference;
-
-import lombok.SneakyThrows;
+import java.io.IOException;
 
 /**
  * Search GIFs Request
@@ -32,9 +28,14 @@ import lombok.SneakyThrows;
  * @author Bruno Candido Volpato da Cunha
  *
  */
-@NoArgsConstructor
-@Builder
 public class CoinPaymentsBasicAccountInfoRequest extends CoinPaymentsPostRequest<ResponseWrapper<BasicInfoResponse>> {
+
+    public CoinPaymentsBasicAccountInfoRequest() {
+    }
+
+    public static CoinPaymentsBasicAccountInfoRequestBuilder builder() {
+        return new CoinPaymentsBasicAccountInfoRequestBuilder();
+    }
 
     @Override
     public String getUrl() {
@@ -42,15 +43,15 @@ public class CoinPaymentsBasicAccountInfoRequest extends CoinPaymentsPostRequest
     }
     
     @Override
-    @SneakyThrows
+    
     public String getPayload() {
         return "cmd=get_basic_info";
     }
 
 
     @Override
-    @SneakyThrows
-    public ResponseWrapper<BasicInfoResponse> parseResult(int statusCode, String content) {
+    
+    public ResponseWrapper<BasicInfoResponse> parseResult(int statusCode, String content) throws IOException {
         ResponseWrapper<BasicInfoResponse> wrapper = parseJson(content, new TypeReference<ResponseWrapper<BasicInfoResponse>>() {});
 
         //ResponseWrapper<BasicInfoResponse> wrapper = parseJson(content, ResponseWrapper.class);
@@ -58,4 +59,16 @@ public class CoinPaymentsBasicAccountInfoRequest extends CoinPaymentsPostRequest
         return wrapper;
     }
 
+    public static class CoinPaymentsBasicAccountInfoRequestBuilder {
+        CoinPaymentsBasicAccountInfoRequestBuilder() {
+        }
+
+        public CoinPaymentsBasicAccountInfoRequest build() {
+            return new CoinPaymentsBasicAccountInfoRequest();
+        }
+
+        public String toString() {
+            return "CoinPaymentsBasicAccountInfoRequest.CoinPaymentsBasicAccountInfoRequestBuilder()";
+        }
+    }
 }
